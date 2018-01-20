@@ -1,3 +1,4 @@
+from __future__ import division
 import operator
 from collections import Counter
 import json
@@ -65,7 +66,7 @@ def preprocess(s, lowercase=False):
 com = defaultdict(lambda : defaultdict(int))
 
 n_docs=0
-fname = 'python.json'
+fname = 'python2.json'
 with open(fname, 'r') as f:
     count_all = Counter()
     count_single = Counter()
@@ -84,12 +85,9 @@ with open(fname, 'r') as f:
         terms_single = set(terms_all)
         count_single.update(terms_all)
         # Count hashtags only
-        terms_hash = [term for term in preprocess(tweet['text']) 
-                      if term.startswith('#')]
+        terms_hash = [term for term in preprocess(tweet['text']) if term.startswith('#')]
         # Count terms only (no hashtags, no mentions)
-        terms_only = [term for term in preprocess(tweet['text']) 
-                      if term not in stop and
-                      not term.startswith(('#', '@'))] 
+        terms_only = [term for term in preprocess(tweet['text'])   if term not in stop and not term.startswith(('#', '@'))] 
                       # mind the ((double brackets))
                       # startswith() takes a tuple (not a list) if 
                       # we pass a list of inputs
@@ -141,7 +139,8 @@ with open(fname, 'r') as f:
     for t1 in p_t:
         for t2 in com[t1]:
             denom = p_t[t1] * p_t[t2]
-            pmi[t1][t2] = math.log2(p_t_com[t1][t2] / denom)
+            if denom is not 0:
+                pmi[t1][t2] = math.log((p_t_com[t1][t2] / denom),2)
      
     semantic_orientation = {}
     for term, n in p_t.items():
@@ -160,7 +159,7 @@ with open(fname, 'r') as f:
     print(top_neg)
     print("\nTop positive: ")
     print(top_pos)
-    print("Morning?: %f" % semantic_orientation['#SaturdayMorning'])
+    print("\nChelsea: %f" % semantic_orientation['Chelsea'])
 
 
 
