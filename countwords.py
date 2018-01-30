@@ -66,7 +66,7 @@ def preprocess(s, lowercase=False):
 com = defaultdict(lambda : defaultdict(int))
 
 n_docs=0
-fname = 'python2.json'
+fname = 'python1.json'
 with open(fname, 'r') as f:
     count_all = Counter()
     count_single = Counter()
