@@ -8,9 +8,12 @@ from nltk.corpus import stopwords
 import string
 # remember to include the other import from the previous post
 import math
-from CountingWords import *
-from Term_Cocurrence import *
-from countwords import *
+#from CountingWords import *
+#from Term_Cocurrence import *
+#from countwords import *
+punctuation = list(string.punctuation)
+stop = stopwords.words('english') + punctuation + ['rt', 'via']
+
 
 
 
@@ -50,10 +53,10 @@ for term, n in p_t.items():
 semantic_sorted = sorted(semantic_orientation.items(), 
                          key=operator.itemgetter(1), 
                          reverse=True)
-print(semantic_sorted)
+#print(semantic_sorted)
 top_pos = semantic_sorted[:10]
 top_neg = semantic_sorted[-10:]
  
 print(top_pos)
 print(top_neg)
-print("Trailer: %f" % semantic_orientation['#AgnyaathavaasiTrailer'])
+print("Chealsea: %f" % semantic_orientation['#Chelsea'])

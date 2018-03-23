@@ -13,20 +13,20 @@ import string
  
 punctuation = list(string.punctuation)
 stop = stopwords.words('english') + punctuation + ['rt','RT', 'via']
-
+#print(stop)
  
+
+
 
 positive_vocab = [
     'good', 'nice', 'great', 'awesome', 'outstanding',
-    'fantastic', 'terrific', ':)', ':-)', 'like', 'love','Happy'
-    # shall we also include game-specific terms?
-    # 'triumph', 'triumphal', 'triumphant', 'victory', etc.
+    'fantastic', 'terrific', ':)', ':-)', 'like', 'love','happy','applause'
+    # 'triumph', 'triumphal', 'triumphant', 'victory'#game specific terms 
 ]
 negative_vocab = [
-    'bad', 'terrible', 'crap', 'useless', 'hate', ':(', ':-(','outrageous','unjust'
+    'bad', 'terrible', 'crap', 'useless', 'hate', ':(', ':-(','outrageous','unjust','stfu'
     # 'defeat', etc.
 ]
-
 
 
 emoticons_str = r"""
@@ -55,7 +55,7 @@ emoticon_re = re.compile(r'^'+emoticons_str+'$', re.VERBOSE | re.IGNORECASE)
 def tokenize(s):
     return tokens_re.findall(s)
  
-def preprocess(s, lowercase=False):
+def preprocess(s, lowercase=True):#preprocessing every tweet in this function
     tokens = tokenize(s)
     if lowercase:
         tokens = [token if emoticon_re.search(token) else token.lower() for token in tokens]
@@ -74,7 +74,7 @@ with open(fname, 'r') as f:
     for line in f:
         n_docs+=1
         tweet = json.loads(line)
-        # Create a list with all the terms
+        #list with all the terms
         terms_all = [term for term in preprocess(tweet['text'])]
         # Update the counter
         count_all.update(terms_all)
@@ -88,9 +88,8 @@ with open(fname, 'r') as f:
         terms_hash = [term for term in preprocess(tweet['text']) if term.startswith('#')]
         # Count terms only (no hashtags, no mentions)
         terms_only = [term for term in preprocess(tweet['text'])   if term not in stop and not term.startswith(('#', '@'))] 
-                      # mind the ((double brackets))
-                      # startswith() takes a tuple (not a list) if 
-                      # we pass a list of inputs
+                      # starts with takes a tuple as input
+                     
 
         for i in range(len(terms_only)-1):            
             for j in range(i+1, len(terms_only)):
@@ -159,7 +158,7 @@ with open(fname, 'r') as f:
     print(top_neg)
     print("\nTop positive: ")
     print(top_pos)
-    print("\nChelsea: %f" % semantic_orientation['Chelsea'])
+    print("\nChelsea: %f" % semantic_orientation['chelsea'])
 
 
 

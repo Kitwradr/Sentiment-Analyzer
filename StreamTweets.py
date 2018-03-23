@@ -16,7 +16,7 @@ class MyListener(StreamListener):
 
     def on_data(self,data):
         try:
-            with open('python2.json','a') as f:
+            with open('python3.json','a') as f:
                 f.write(data)
                 return True
         except BaseException as e:
@@ -26,4 +26,4 @@ class MyListener(StreamListener):
         print(status)
         return True
 twitter_stream = Stream(auth , MyListener())
-twitter_stream.filter(track=['#BHACHE'])
+twitter_stream.filter(track=['#BellLetsTalk'])
