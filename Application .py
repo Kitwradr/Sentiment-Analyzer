@@ -1,5 +1,6 @@
 import tkinter as tk
 from constants import *
+from StreamTweets import MyListener
 
 LARGE_FONT = ("Verdana" , 25)
 
@@ -76,13 +77,13 @@ class PageOne(tk.Frame):
     def printhashtag(self ):
         self.controller.show_frame(PageTwo)
         global hashtagText
-        print(hashtagText.get())
+        hashtag = (hashtagText.get())
+        self.streamFunc(hashtag)
     
-    # def streamFunc(self ,parent ,  controller):
-    #     global hashtagText
-    #     controller.show_frame(PageTwo)
-    #     hashtag = hashtagText.get()
-    #     print(hashtag)
+    def streamFunc(self , hashtag):
+        ob = MyListener()
+        ob.stream(hashtag)
+        
 
 
 class PageTwo(tk.Frame ):
@@ -92,10 +93,10 @@ class PageTwo(tk.Frame ):
         hashtag = hashtagText.get()
 
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page Two!!!", font=LARGE_FONT)
+        label = tk.Label(self, text="Streaming!!!", font=main_heading)
         label.pack(pady=10,padx=10)
 
-        button1 = tk.Button(self, text="Back to Home",
+        button1 = tk.Button(self, text="Back to Home", font = sub_heading,
                             command=lambda: controller.show_frame(StartPage))
         button1.pack()
 

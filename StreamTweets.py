@@ -26,6 +26,6 @@ class MyListener(StreamListener):
         print(status)
         return True
 
-    def stream(self):
+    def stream(self , hashtag):
         twitter_stream = Stream(auth , MyListener())
-        twitter_stream.filter(track=['#BellLetsTalk'])
+        twitter_stream.filter(track=[hashtag])
