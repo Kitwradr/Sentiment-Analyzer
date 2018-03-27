@@ -54,9 +54,11 @@ class PageOne(tk.Frame):
 
 
     def __init__(self, parent, controller):
+        global hashtagText , hashtag
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Enter the hashtag", font=LARGE_FONT , bg = "lightblue")
         label.pack(pady=100,padx=10)
+        self.controller = controller
 
         button1 = tk.Button(self, text="Back to Home",
                             command=lambda: controller.show_frame(StartPage))
@@ -67,22 +69,27 @@ class PageOne(tk.Frame):
         hashtagText.pack(pady = 20 , ipady = 10 )
 
         button2 = tk.Button(self, text="Stream Tweets",
-                            command=lambda:controller.show_frame(PageTwo))
+                            command=self.printhashtag)
         button2.pack(pady = 20)
         button1.pack()
+
+    def printhashtag(self ):
+        self.controller.show_frame(PageTwo)
+        global hashtagText
+        print(hashtagText.get())
     
-    def streamFunc(self , controller):
-        controller.show_frame(PageTwo)
-        hashtag = hashtagText.get()
+    # def streamFunc(self ,parent ,  controller):
+    #     global hashtagText
+    #     controller.show_frame(PageTwo)
+    #     hashtag = hashtagText.get()
+    #     print(hashtag)
 
 
 class PageTwo(tk.Frame ):
 
     def __init__(self, parent, controller):
-
-        #ob = PageOne()
-        #hashtag = hashtagText.get()
-        print(hashtag+"osriegh")
+        global hashtagText
+        hashtag = hashtagText.get()
 
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Page Two!!!", font=LARGE_FONT)
@@ -93,8 +100,11 @@ class PageTwo(tk.Frame ):
         button1.pack()
 
         button2 = tk.Button(self, text="Page One",
-                            command=lambda: controller.show_frame(PageOne))
+                            command=self.printhashtag(hashtagText))
         button2.pack()
+    def printhashtag(self ,hashtagText):
+        print(hashtagText.get())
+
 
 if __name__ == "__main__":
     app = EmotionApp()
