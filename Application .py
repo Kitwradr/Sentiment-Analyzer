@@ -1,9 +1,11 @@
 import tkinter as tk
 from constants import *
-from StreamTweets import MyListener
+from StreamTweets import *
+import threading
 
 LARGE_FONT = ("Verdana" , 25)
 
+#ob = MyListener()
 global hashtagText 
 
 class EmotionApp(tk.Tk):
@@ -51,11 +53,11 @@ class StartPage(tk.Frame):
         button2.pack()
 
 #hashtagText=None
-class PageOne(tk.Frame):
+class PageOne(tk.Frame , threading.Thread):
 
 
     def __init__(self, parent, controller):
-        global hashtagText , hashtag
+        global hashtagText , hashtag 
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Enter the hashtag", font=LARGE_FONT , bg = "lightblue")
         label.pack(pady=100,padx=10)
@@ -81,8 +83,8 @@ class PageOne(tk.Frame):
         self.streamFunc(hashtag)
     
     def streamFunc(self , hashtag):
-        ob = MyListener()
-        ob.stream(hashtag)
+        
+        fetchtweet(hashtag)
         
 
 
@@ -95,6 +97,9 @@ class PageTwo(tk.Frame ):
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Streaming!!!", font=main_heading)
         label.pack(pady=10,padx=10)
+        button3 = tk.Button(self , text ="Stop streaming" , font = sub_heading,
+                            command = self.stopButtonClick)
+        button3.pack(pady=20)
 
         button1 = tk.Button(self, text="Back to Home", font = sub_heading,
                             command=lambda: controller.show_frame(StartPage))
@@ -105,6 +110,10 @@ class PageTwo(tk.Frame ):
         button2.pack()
     def printhashtag(self ,hashtagText):
         print(hashtagText.get())
+
+    def stopButtonClick(self):
+        stop_stream()
+
 
 
 if __name__ == "__main__":

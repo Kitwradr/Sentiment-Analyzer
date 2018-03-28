@@ -12,6 +12,8 @@ auth = OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_secret)
  
 api = tweepy.API(auth)
+
+
 class MyListener(StreamListener):
 
     def on_data(self,data):
@@ -24,8 +26,13 @@ class MyListener(StreamListener):
         return True
     def on_error(self,status):
         print(status)
-        return True
+        return False
 
-    def stream(self , hashtag):
-        twitter_stream = Stream(auth , MyListener())
-        twitter_stream.filter(track=[hashtag])
+
+twitter_stream = Stream(auth , MyListener())
+
+def fetchtweet(hashtag):
+    twitter_stream.filter(track=[hashtag] , async = True)
+
+def stop_stream():
+    twitter_stream.disconnect()
