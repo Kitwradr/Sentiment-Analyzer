@@ -187,7 +187,15 @@ with open(fname, 'r') as f:
 			print("EQUAL")
 			print(term+" pos"+str(positive_assoc)+" neg "+str(negative_assoc))
 
+<<<<<<< HEAD
 		semantic_orientation[term] = positive_assoc - negative_assoc
+=======
+    semantic_sorted = sorted(semantic_orientation.items(), 
+                             key=operator.itemgetter(1), 
+                             reverse=True)
+    top_pos = semantic_sorted[:10]
+    top_neg = semantic_sorted[-10:]
+>>>>>>> 8e9df77d27859f3e19e08f57fb3e2668a25f8749
 
 	semantic_sorted = sorted(semantic_orientation.items(), 
 							 key=operator.itemgetter(1), 
