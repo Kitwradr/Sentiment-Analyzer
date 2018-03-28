@@ -150,8 +150,8 @@ with open(fname, 'r') as f:
     semantic_sorted = sorted(semantic_orientation.items(), 
                              key=operator.itemgetter(1), 
                              reverse=True)
-    top_pos = semantic_sorted[:20]
-    top_neg = semantic_sorted[-20:]
+    top_pos = semantic_sorted[:10]
+    top_neg = semantic_sorted[-10:]
 
     #print(semantic_sorted)
     print("\ntop negative: ")
