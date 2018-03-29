@@ -19,12 +19,12 @@ stop = stopwords.words('english') + punctuation + ['rt','RT', 'via']
 
 positive_vocab = [
 	'good', 'nice', 'great', 'awesome', 'outstanding',
-	'fantastic', 'terrific', ':)', ':-)', 'like', 'love','happy','applause'
+	'fantastic', 'terrific', ':)', ':-)', 'like', 'love','happy','applause','😂','🤣','😁','😄','😃','😀','☺','😊','🙂','😉','😛','😝','😜','🤪','😬','😘','😍'
 	# shall we also include game-specific terms?
 	# 'triumph', 'triumphal', 'triumphant', 'victory', etc.
 ]
 negative_vocab = [
-	'bad', 'terrible', 'crap', 'useless', 'hate', ':(', ':-(','outrageous','unjust','stfu','defeat'
+	'bad', 'terrible', 'crap', 'useless', 'hate', ':(', ':-(','outrageous','unjust','stfu','defeat','🤨','😒','😞','😔','😟','😕','🙁','☹','😣','😫','😩','😤','😠','😡','🤬','😨'
 	# 'defeat', etc.
 ]
 
@@ -188,11 +188,7 @@ with open(fname, 'r') as f:
 			print("EQUAL")
 			print(term+" pos"+str(positive_assoc)+" neg "+str(negative_assoc))
 
-	semantic_sorted = sorted(semantic_orientation.items(), 
-							 key=operator.itemgetter(1), 
-							 reverse=True)
-	top_pos = semantic_sorted[:10]
-	top_neg = semantic_sorted[-10:]
+		semantic_orientation[term] = positive_assoc - negative_assoc
 
 	semantic_sorted = sorted(semantic_orientation.items(), 
 							 key=operator.itemgetter(1), 
@@ -209,6 +205,3 @@ with open(fname, 'r') as f:
 	print("willian: "+str(semantic_orientation["willian"]))
 	print("conte: "+str(semantic_orientation["conte"]))
 	print("ed: "+str(semantic_orientation["eduardo"]))
-
-
- 
