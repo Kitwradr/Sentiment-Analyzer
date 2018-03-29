@@ -1,7 +1,9 @@
 import tkinter as tk
+from tkinter import *
 from constants import *
 from StreamTweets import *
 import threading
+from globals import *
 
 LARGE_FONT = ("Verdana" , 25)
 
@@ -103,16 +105,64 @@ class PageTwo(tk.Frame ):
 
         button1 = tk.Button(self, text="Back to Home", font = sub_heading,
                             command=lambda: controller.show_frame(StartPage))
-        button1.pack()
+        button1.pack(side = LEFT , pady = 20 , padx = 50)
 
         button2 = tk.Button(self, text="Page One",
-                            command=self.printhashtag(hashtagText))
-        button2.pack()
+                            command=lambda:controller.show_frame(PageOne))
+        button2.pack(SIDE=LEFT , pady = 20 , padx = 50)
+        button4 = tk.Button(self ,text = "Start Sentiment analysis",
+                            command = lambda:controller.show_frame(PageThree))
+        button4.pack(pady =20)
     def printhashtag(self ,hashtagText):
         print(hashtagText.get())
 
     def stopButtonClick(self):
         stop_stream()
+
+class PageThree(tk.Frame):
+
+    i=0 
+    length = len(adjectives_list)
+    def __init__(self, parent, controller):
+    
+        tk.Frame.__init__(self, parent)
+        label = tk.Label(self, text="Select category of theese top words", font=main_heading)
+        label.pack(pady=10,padx=10)
+
+        self.topLabel = tk.Label(self , text =adjectives_list[self.i] , font = sub_heading)
+        self.i+=1
+        label.pack(pady=20)
+
+
+        button1 = tk.Button(self , text ="Positive" , font = sub_heading,
+                            command = self.posButtonClick)
+        button1.pack( padx = 30 , side=LEFT )
+
+        button2 = tk.Button(self , text ="Negative" , font = sub_heading,
+                            command = self.negButtonClick)
+        button2.pack( padx = 30,side=LEFT)
+
+        button3 = tk.Button(self , text ="Neutral" , font = sub_heading,
+                            command = self.neutralButtonClick)
+        button3.pack(side=LEFT , padx = 30)
+
+    def posButtonClick(self):
+        self.topLabel['text'] = adjectives_list[self.i]
+        positive_vocab.append(adjectives_list[self.i])
+        self.i+=1
+
+    def negButtonClick(self):
+        self.topLabel['text'] = adjectives_list[self.i]
+        negative_vocab.append(adjectives_list[self.i])
+        self.i+=1
+
+    def neutralButtonClick(self):
+        self.topLabel['text']=adjectives_list[self.i]
+        self.i+=1
+        
+
+
+
 
 
 

@@ -3,7 +3,7 @@ import operator
 from collections import Counter
 import json
 import math
-
+from  globals import *
 from collections import defaultdict
 
 import re
@@ -130,6 +130,7 @@ with open(fname, 'r') as f:
 	for text in toptweets:
 		for x,y in pos_tag(word_tokenize(text)):
 			if y=="JJ" or y=="JJR" or y=="JJS":
+				adjectives_list += x
 				
 				print("Which category does \""+x+"\" belong to? 1 positive 2 negative 3 none.")
 				op=int(input())
@@ -187,15 +188,11 @@ with open(fname, 'r') as f:
 			print("EQUAL")
 			print(term+" pos"+str(positive_assoc)+" neg "+str(negative_assoc))
 
-<<<<<<< HEAD
-		semantic_orientation[term] = positive_assoc - negative_assoc
-=======
-    semantic_sorted = sorted(semantic_orientation.items(), 
-                             key=operator.itemgetter(1), 
-                             reverse=True)
-    top_pos = semantic_sorted[:10]
-    top_neg = semantic_sorted[-10:]
->>>>>>> 8e9df77d27859f3e19e08f57fb3e2668a25f8749
+	semantic_sorted = sorted(semantic_orientation.items(), 
+							 key=operator.itemgetter(1), 
+							 reverse=True)
+	top_pos = semantic_sorted[:10]
+	top_neg = semantic_sorted[-10:]
 
 	semantic_sorted = sorted(semantic_orientation.items(), 
 							 key=operator.itemgetter(1), 
