@@ -128,19 +128,20 @@ with open(fname, 'r') as f:
 			break
 
 	for text in toptweets:
+		print(text)
 		for x,y in pos_tag(word_tokenize(text)):
 			if y=="JJ" or y=="JJR" or y=="JJS":
-				adjectives_list += x
-				
-				print("Which category does \""+x+"\" belong to? 1 positive 2 negative 3 none.")
-				op=int(input())
+				adjectives_list.append( x)
+				# print(x)
+				# print("Which category does \""+x+"\" belong to? 1 positive 2 negative 3 none.")
+				# op=int(input())
 
-				if op==1 and x not in positive_vocab:
-					positive_vocab.append(x)
-				elif op==2 and x not in negative_vocab:
-					negative_vocab.append(x)
-
-
+				# if op==1 and x not in positive_vocab:
+				# 	positive_vocab.append(x)
+				# elif op==2 and x not in negative_vocab:
+				# 	negative_vocab.append(x)
+	print("----------------------------------")
+	print(adjectives_list)
 	# n_docs is the total n. of tweets
 	p_t = {}
 	p_t_com = defaultdict(lambda : defaultdict(int))
@@ -184,24 +185,26 @@ with open(fname, 'r') as f:
 	for term, n in p_t.items():
 		positive_assoc = sum(pmi[term][tx] for tx in positive_vocab)
 		negative_assoc = sum(pmi[term][tx] for tx in negative_vocab)
-		if positive_assoc == negative_assoc:
-			print("EQUAL")
-			print(term+" pos"+str(positive_assoc)+" neg "+str(negative_assoc))
+		# if positive_assoc == negative_assoc:
+		# 	print("EQUAL")
+		# 	print(term+" pos"+str(positive_assoc)+" neg "+str(negative_assoc))
 
 		semantic_orientation[term] = positive_assoc - negative_assoc
 
 	semantic_sorted = sorted(semantic_orientation.items(), 
 							 key=operator.itemgetter(1), 
 							 reverse=True)
-	top_pos = semantic_sorted[:20]
-	top_neg = semantic_sorted[-20:]
 
-	#print(semantic_sorted)
-	print("\ntop negative: ")
-	print(top_neg)
-	print("\nTop positive: ")
-	print(top_pos)
-	print("HAZARD: "+str(semantic_orientation["hazard"]))
-	print("willian: "+str(semantic_orientation["willian"]))
-	print("conte: "+str(semantic_orientation["conte"]))
-	print("ed: "+str(semantic_orientation["eduardo"]))
+	if __name__ == "__main__":
+		top_pos = semantic_sorted[:20]
+		top_neg = semantic_sorted[-20:]
+
+		#print(semantic_sorted)
+		print("\ntop negative: ")
+		print(top_neg)
+		print("\nTop positive: ")
+		print(top_pos)
+		print("HAZARD: "+str(semantic_orientation["hazard"]))
+		print("willian: "+str(semantic_orientation["willian"]))
+		print("conte: "+str(semantic_orientation["conte"]))
+		print("ed: "+str(semantic_orientation["eduardo"]))
