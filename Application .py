@@ -25,7 +25,7 @@ class EmotionApp(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, PageOne, PageTwo , PageThree):
+        for F in (StartPage, PageOne, PageTwo , PageThree , PageFour):
 
             frame = F(container, self)
 
@@ -107,9 +107,9 @@ class PageTwo(tk.Frame ):
 
         button1 = tk.Button(self, text="Back to Home", font = sub_heading,
                             command=lambda: controller.show_frame(StartPage))
-        button1.pack(side = LEFT , pady = 20 , padx = 50)
+        button1.pack( pady = 20 , padx = 50,side = LEFT)
 
-        button2 = tk.Button(self, text="Page One",
+        button2 = tk.Button(self, text="Page One",font = sub_heading,
                             command=lambda:controller.show_frame(PageOne))
         button2.pack( pady = 20 , padx = 50 , side=LEFT )
         button4 = tk.Button(self ,text = "Start Sentiment analysis",
@@ -136,7 +136,7 @@ class PageThree(tk.Frame):
         self.i+=1
         label.pack(pady=20)
         self.topLabel.pack(pady=40)
-
+        self.controller = controller
 
         button1 = tk.Button(self , text ="Positive" , font = sub_heading,
                             command = self.posButtonClick)
@@ -151,26 +151,63 @@ class PageThree(tk.Frame):
         button3.pack( padx = 30, side=LEFT )
 
     def posButtonClick(self):
+        if self.i == self.length:
+            self.raiseFrame4()
         print(adjectives_list[self.i])
         self.topLabel['text'] = adjectives_list[self.i]
         positive_vocab.append(adjectives_list[self.i])
         if self.i<self.length-1:
             self.i+=1
+        
 
     def negButtonClick(self):
+        if self.i == self.length-1:
+            self.raiseFrame4()
         print(adjectives_list[self.i])
         self.topLabel['text'] = adjectives_list[self.i]
         negative_vocab.append(adjectives_list[self.i])
         if self.i<self.length-1:
             self.i+=1
+        
 
     def neutralButtonClick(self):
+        print(self.i)
+        print(self.length)
+        if self.i == self.length-1:
+            print("Inside")
+            self.raiseFrame4()
         print(adjectives_list[self.i])
         self.topLabel['text']=adjectives_list[self.i]
         if self.i<self.length-1:
             self.i+=1
         
 
+    def raiseFrame4(self):
+        print("Inside!!!!")
+        self.controller.show_frame(PageFour)
+
+        
+
+class PageFour(tk.Frame):
+
+    def __init__(self,parent , controller):
+
+        tk.Frame.__init__(self, parent)
+        label1 = tk.Label(self , text ="Enter the word for which sentiment is to be found" , font = mid_heading)
+        label1.pack(pady=20)
+
+        self.wordEntry = tk.Entry(self , font = ("TimesNewRoman" , "16"))
+        self.wordEntry.pack(pady = 20)
+
+        button1 = tk.Button(self , text="Enter" , font = sub_heading,
+                                            command = self.semOrientation )
+        button1.pack(padx = 20 , side=RIGHT)
+
+    def semOrientation(self):
+        word = self.wordEntry.get()
+        result = semantic_orientation[word]
+        label2 = tk.Label(self , text="Semantic orientation of "+word+str(result))
+        label2.pack(pady=30)
 
 
 

@@ -146,14 +146,23 @@ with open(fname, 'r') as f:
 			for word in sentence:
 				for actualword in word:
 					if actualword['tag']=='ADJ':
-						# print(actualword['word'])
-						print("Which category does \""+actualword['word']+" \" belong to? 1 positive 2 negative 3 none.")
-						op=int(input())
+						
+						tempWord = actualword['word']
+						char_list = [tempWord[j] for j in range(len(tempWord)) if ord(tempWord[j]) in range(65536)]
+						tempWord=''
+						for j in char_list:
+							tempWord +=j
 
-						if op==1 and actualword['word'] not in positive_vocab:
-							positive_vocab.append(actualword['word'])
-						elif op==2 and actualword['word'] not in negative_vocab:
-							negative_vocab.append(actualword['word'])	
+						# print(actualword['word'])
+						# print("Which category does \""+actualword['word']+" \" belong to? 1 positive 2 negative 3 none.")
+						# op=int(input())
+
+						# if op==1 and actualword['word'] not in positive_vocab:
+						# 	positive_vocab.append(actualword['word'])
+						# elif op==2 and actualword['word'] not in negative_vocab:
+						# 	negative_vocab.append(actualword['word'])
+						if tempWord is not '':
+							adjectives_list.append(tempWord)	
 		
 		
 
