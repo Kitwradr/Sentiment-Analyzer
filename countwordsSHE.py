@@ -11,6 +11,12 @@ import re
 from nltk.corpus import stopwords
 from nltk import word_tokenize, pos_tag
 import string
+
+try:
+    from urllib.request import urlopen
+    from urllib.parse import urlencode
+except:
+    from urllib import urlopen, urlencode # Python 2
  
 punctuation = list(string.punctuation)
 stop = stopwords.words('english') + punctuation + ['rt','RT', 'via']
@@ -124,22 +130,34 @@ with open(fname, 'r') as f:
 
 			toptweets.append(i[2])
 			ctr+=1
-		if ctr>5:
+		if ctr>10:
 			break
 
 	for text in toptweets:
-		print(text)
-		for x,y in pos_tag(word_tokenize(text)):
-			if y=="JJ" or y=="JJR" or y=="JJS":
-				adjectives_list.append( x)
-				# print(x)
-				# print("Which category does \""+x+"\" belong to? 1 positive 2 negative 3 none.")
-				# op=int(input())
+		q = 'https://api.textgain.com/1/tag?' 
+		q += urlencode(dict(q=text, lang='en', key='***'))
+		r = urlopen(q)
+		r = r.read()
+		r = r.decode('utf-8')
+		r = json.loads(r)
 
-				# if op==1 and x not in positive_vocab:
-				# 	positive_vocab.append(x)
-				# elif op==2 and x not in negative_vocab:
-				# 	negative_vocab.append(x)
+		partofspeechlist=r['text']
+		for sentence in partofspeechlist:
+			for word in sentence:
+				for actualword in word:
+					if actualword['tag']=='ADJ':
+						# print(actualword['word'])
+						print("Which category does \""+actualword['word']+" \" belong to? 1 positive 2 negative 3 none.")
+						op=int(input())
+
+						if op==1 and actualword['word'] not in positive_vocab:
+							positive_vocab.append(actualword['word'])
+						elif op==2 and actualword['word'] not in negative_vocab:
+							negative_vocab.append(actualword['word'])	
+		
+		
+
+				
 	print("----------------------------------")
 	print(adjectives_list)
 	# n_docs is the total n. of tweets
