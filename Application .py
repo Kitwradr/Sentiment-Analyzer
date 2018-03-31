@@ -98,6 +98,7 @@ class PageTwo(tk.Frame ):
         global hashtagText
         hashtag = hashtagText.get()
 
+        self.contoller = controller
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Streaming!!!", font=main_heading)
         label.pack(pady=10,padx=10)
@@ -130,6 +131,7 @@ class PageThree(tk.Frame):
         
     
         tk.Frame.__init__(self, parent)
+        self.controller = controller
         label = tk.Label(self, text="Select category of theese top words", font=main_heading)
         label.pack(pady=10,padx=10)
         print(adjectives_list[self.i])
@@ -138,7 +140,7 @@ class PageThree(tk.Frame):
         self.i+=1
         label.pack(pady=20)
         self.topLabel.pack(pady=40)
-        self.controller = controller
+        
 
         button1 = tk.Button(self , text ="Positive" , font = sub_heading,
                             command = self.posButtonClick)

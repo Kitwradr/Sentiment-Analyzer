@@ -73,7 +73,7 @@ def preprocess(s, lowercase=True):
 com = defaultdict(lambda : defaultdict(int))
 
 
-fname = 'NewApp.json'
+fname = 'NewApp1.json'
 def mainAnalysis():
 	n_docs=0
 	global semantic_orientation
@@ -238,3 +238,4 @@ def mainAnalysis():
 			print("willian: "+str(semantic_orientation["willian"]))
 			print("conte: "+str(semantic_orientation["conte"]))
 			print("ed: "+str(semantic_orientation["eduardo"]))
+mainAnalysis()
