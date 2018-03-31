@@ -72,166 +72,169 @@ def preprocess(s, lowercase=True):
 
 com = defaultdict(lambda : defaultdict(int))
 
-n_docs=0
-fname = 'bhache.json'
-with open(fname, 'r') as f:
-	count_all = Counter()
-	tweetList =  []
-	count_single = Counter()
-	count_stop_single = Counter()
-	for line in f:
-		tweet = json.loads(line)
-		if 'retweeted_status' in tweet:
-			str1=tweet['retweeted_status']['retweet_count']
-			tweetText = tweet['retweeted_status']['text']
-			id1 = tweet['retweeted_status']['id']
-			tweetList= tweetList+[[str1,id1,tweetText]]
 
-		n_docs+=1
+fname = 'NewApp.json'
+def mainAnalysis():
+	n_docs=0
+	global semantic_orientation
+	with open(fname, 'r') as f:
+		count_all = Counter()
+		tweetList =  []
+		count_single = Counter()
+		count_stop_single = Counter()
+		for line in f:
+			tweet = json.loads(line)
+			if 'retweeted_status' in tweet:
+				str1=tweet['retweeted_status']['retweet_count']
+				tweetText = tweet['retweeted_status']['text']
+				id1 = tweet['retweeted_status']['id']
+				tweetList= tweetList+[[str1,id1,tweetText]]
+
+			n_docs+=1
+			
+			# Create a list with all the terms
+			terms_all = [term for term in preprocess(tweet['text'])]
+			# Update the counter
+			count_all.update(terms_all)
+			
+			terms_stop = [term for term in preprocess(tweet['text']) if term not in stop]
+			count_stop_single.update(terms_stop)
+
+			terms_single = set(terms_all)
+			count_single.update(terms_all)
+			# Count hashtags only
+			terms_hash = [term for term in preprocess(tweet['text']) if term.startswith('#')]
+			# Count terms only (no hashtags, no mentions)
+			terms_only = [term for term in preprocess(tweet['text'])   if term not in stop and not term.startswith(('#', '@'))] 
+							# mind the ((double brackets))
+							# startswith() takes a tuple (not a list) if 
+							# we pass a list of inputs
+
+			for i in range(len(terms_only)-1):            
+				for j in range(i+1, len(terms_only)):
+					w1, w2 = sorted([terms_only[i], terms_only[j]])                
+					if w1 != w2:
+						com[w1][w2] += 1
+			
+		print(count_stop_single.most_common(20))
+
+
+		tweetList.sort()
+
+
+
+		newlist = tweetList[::-1]
+		idlist= list()
+		toptweets=list()
+		ctr=0
+		for i in newlist:
+			if i[1] not in idlist:
+				idlist.append(i[1])
+
+				toptweets.append(i[2])
+				ctr+=1
+			if ctr>10:
+				break
+
+		for text in toptweets:
+			q = 'https://api.textgain.com/1/tag?' 
+			q += urlencode(dict(q=text, lang='en', key='***'))
+			r = urlopen(q)
+			r = r.read()
+			r = r.decode('utf-8')
+			r = json.loads(r)
+
+			partofspeechlist=r['text']
+			for sentence in partofspeechlist:
+				for word in sentence:
+					for actualword in word:
+						if actualword['tag']=='ADJ':
+							
+							tempWord = actualword['word']
+							char_list = [tempWord[j] for j in range(len(tempWord)) if ord(tempWord[j]) in range(65536)]
+							tempWord=''
+							for j in char_list:
+								tempWord +=j
+
+							# print(actualword['word'])
+							# print("Which category does \""+actualword['word']+" \" belong to? 1 positive 2 negative 3 none.")
+							# op=int(input())
+
+							# if op==1 and actualword['word'] not in positive_vocab:
+							# 	positive_vocab.append(actualword['word'])
+							# elif op==2 and actualword['word'] not in negative_vocab:
+							# 	negative_vocab.append(actualword['word'])
+							if tempWord is not '':
+								adjectives_list.append(tempWord)	
+			
+			
+
+					
+		print("----------------------------------")
+		print(adjectives_list)
+		# n_docs is the total n. of tweets
+		p_t = {}
+		p_t_com = defaultdict(lambda : defaultdict(int))
 		
-		# Create a list with all the terms
-		terms_all = [term for term in preprocess(tweet['text'])]
-		# Update the counter
-		count_all.update(terms_all)
-		
-		terms_stop = [term for term in preprocess(tweet['text']) if term not in stop]
-		count_stop_single.update(terms_stop)
+		for term, n in count_stop_single.items():
+			p_t[term] = n / n_docs
+			for t2 in com[term]:
+				p_t_com[term][t2] = com[term][t2] / n_docs
 
-		terms_single = set(terms_all)
-		count_single.update(terms_all)
-		# Count hashtags only
-		terms_hash = [term for term in preprocess(tweet['text']) if term.startswith('#')]
-		# Count terms only (no hashtags, no mentions)
-		terms_only = [term for term in preprocess(tweet['text'])   if term not in stop and not term.startswith(('#', '@'))] 
-						# mind the ((double brackets))
-						# startswith() takes a tuple (not a list) if 
-						# we pass a list of inputs
-
-		for i in range(len(terms_only)-1):            
-			for j in range(i+1, len(terms_only)):
-				w1, w2 = sorted([terms_only[i], terms_only[j]])                
-				if w1 != w2:
-					com[w1][w2] += 1
-		
-	print(count_stop_single.most_common(20))
+		#print(p_t)
+		print("\n\n")
+		#print(p_t_com)
 
 
-	tweetList.sort()
+		com_max = []
+	# For each term, look for the most common co-occurrent terms
+		for t1 in com:
+			t1_max_terms = sorted(com[t1].items(), key=operator.itemgetter(1), reverse=True)[:5]
+			for t2, t2_count in t1_max_terms:
+				com_max.append(((t1, t2), t2_count))
+		# Get the most frequent co-occurrences
+		terms_max = sorted(com_max, key=operator.itemgetter(1), reverse=True)
+		print(terms_max[:5])
 
 
 
-	newlist = tweetList[::-1]
-	idlist= list()
-	toptweets=list()
-	ctr=0
-	for i in newlist:
-		if i[1] not in idlist:
-			idlist.append(i[1])
 
-			toptweets.append(i[2])
-			ctr+=1
-		if ctr>10:
-			break
 
-	for text in toptweets:
-		q = 'https://api.textgain.com/1/tag?' 
-		q += urlencode(dict(q=text, lang='en', key='***'))
-		r = urlopen(q)
-		r = r.read()
-		r = r.decode('utf-8')
-		r = json.loads(r)
 
-		partofspeechlist=r['text']
-		for sentence in partofspeechlist:
-			for word in sentence:
-				for actualword in word:
-					if actualword['tag']=='ADJ':
-						
-						tempWord = actualword['word']
-						char_list = [tempWord[j] for j in range(len(tempWord)) if ord(tempWord[j]) in range(65536)]
-						tempWord=''
-						for j in char_list:
-							tempWord +=j
 
-						# print(actualword['word'])
-						# print("Which category does \""+actualword['word']+" \" belong to? 1 positive 2 negative 3 none.")
-						# op=int(input())
 
-						# if op==1 and actualword['word'] not in positive_vocab:
-						# 	positive_vocab.append(actualword['word'])
-						# elif op==2 and actualword['word'] not in negative_vocab:
-						# 	negative_vocab.append(actualword['word'])
-						if tempWord is not '':
-							adjectives_list.append(tempWord)	
+
+		pmi = defaultdict(lambda : defaultdict(int))
+		for t1 in p_t:
+			for t2 in com[t1]:
+				denom = p_t[t1] * p_t[t2]
+				if denom is not 0:
+					pmi[t1][t2] = math.log((p_t_com[t1][t2] / denom),2)
 		
 		
+		for term, n in p_t.items():
+			positive_assoc = sum(pmi[term][tx] for tx in positive_vocab)
+			negative_assoc = sum(pmi[term][tx] for tx in negative_vocab)
+			# if positive_assoc == negative_assoc:
+			# 	print("EQUAL")
+			# 	print(term+" pos"+str(positive_assoc)+" neg "+str(negative_assoc))
 
-				
-	print("----------------------------------")
-	print(adjectives_list)
-	# n_docs is the total n. of tweets
-	p_t = {}
-	p_t_com = defaultdict(lambda : defaultdict(int))
-	 
-	for term, n in count_stop_single.items():
-		p_t[term] = n / n_docs
-		for t2 in com[term]:
-			p_t_com[term][t2] = com[term][t2] / n_docs
+			semantic_orientation[term] = positive_assoc - negative_assoc
 
-	#print(p_t)
-	print("\n\n")
-	#print(p_t_com)
+		semantic_sorted = sorted(semantic_orientation.items(), 
+								key=operator.itemgetter(1), 
+								reverse=True)
 
+		if __name__ == "__main__":
+			top_pos = semantic_sorted[:20]
+			top_neg = semantic_sorted[-20:]
 
-	com_max = []
-# For each term, look for the most common co-occurrent terms
-	for t1 in com:
-		t1_max_terms = sorted(com[t1].items(), key=operator.itemgetter(1), reverse=True)[:5]
-		for t2, t2_count in t1_max_terms:
-			com_max.append(((t1, t2), t2_count))
-	# Get the most frequent co-occurrences
-	terms_max = sorted(com_max, key=operator.itemgetter(1), reverse=True)
-	print(terms_max[:5])
-
-
-
-
-
-
-
-
-
-	pmi = defaultdict(lambda : defaultdict(int))
-	for t1 in p_t:
-		for t2 in com[t1]:
-			denom = p_t[t1] * p_t[t2]
-			if denom is not 0:
-				pmi[t1][t2] = math.log((p_t_com[t1][t2] / denom),2)
-	 
-	semantic_orientation = {}
-	for term, n in p_t.items():
-		positive_assoc = sum(pmi[term][tx] for tx in positive_vocab)
-		negative_assoc = sum(pmi[term][tx] for tx in negative_vocab)
-		# if positive_assoc == negative_assoc:
-		# 	print("EQUAL")
-		# 	print(term+" pos"+str(positive_assoc)+" neg "+str(negative_assoc))
-
-		semantic_orientation[term] = positive_assoc - negative_assoc
-
-	semantic_sorted = sorted(semantic_orientation.items(), 
-							 key=operator.itemgetter(1), 
-							 reverse=True)
-
-	if __name__ == "__main__":
-		top_pos = semantic_sorted[:20]
-		top_neg = semantic_sorted[-20:]
-
-		#print(semantic_sorted)
-		print("\ntop negative: ")
-		print(top_neg)
-		print("\nTop positive: ")
-		print(top_pos)
-		print("HAZARD: "+str(semantic_orientation["hazard"]))
-		print("willian: "+str(semantic_orientation["willian"]))
-		print("conte: "+str(semantic_orientation["conte"]))
-		print("ed: "+str(semantic_orientation["eduardo"]))
+			#print(semantic_sorted)
+			print("\ntop negative: ")
+			print(top_neg)
+			print("\nTop positive: ")
+			print(top_pos)
+			print("HAZARD: "+str(semantic_orientation["hazard"]))
+			print("willian: "+str(semantic_orientation["willian"]))
+			print("conte: "+str(semantic_orientation["conte"]))
+			print("ed: "+str(semantic_orientation["eduardo"]))

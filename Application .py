@@ -120,12 +120,14 @@ class PageTwo(tk.Frame ):
 
     def stopButtonClick(self):
         stop_stream()
+        mainAnalysis()
 
 class PageThree(tk.Frame):
 
     i=0 
     length = len(adjectives_list)
     def __init__(self, parent, controller):
+        
     
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Select category of theese top words", font=main_heading)
@@ -204,6 +206,7 @@ class PageFour(tk.Frame):
         button1.pack(padx = 20 , side=RIGHT)
 
     def semOrientation(self):
+        global semantic_orientation
         word = self.wordEntry.get()
         result = semantic_orientation[word]
         label2 = tk.Label(self , text="Semantic orientation of "+word+str(result))
