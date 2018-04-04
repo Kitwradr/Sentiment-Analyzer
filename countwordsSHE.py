@@ -81,6 +81,7 @@ def mainAnalysis():
 		fname = g.filename
 	else:
 		fname = 'NewApp.json'
+	# fname='shobhitgod.json'
 	print("filename = "+fname)
 	with open(fname, 'r') as f:
 		count_all = Counter()
@@ -143,36 +144,16 @@ def mainAnalysis():
 		print("--------------------------------------------------------")
 		print(toptweets)
 		for text in toptweets:
-			q = 'https://api.textgain.com/1/tag?' 
-			q += urlencode(dict(q=text, lang='en', key='***'))
-			r = urlopen(q)
-			r = r.read()
-			r = r.decode('utf-8')
-			r = json.loads(r)
-
-			partofspeechlist=r['text']
-			for sentence in partofspeechlist:
-				for word in sentence:
-					for actualword in word:
-						if actualword['tag']=='ADJ':
-							
-							tempWord = actualword['word']
-							char_list = [tempWord[j] for j in range(len(tempWord)) if ord(tempWord[j]) in range(65536)]
-							tempWord=''
-							for j in char_list:
-								tempWord +=j
-
-							# print(actualword['word'])
-							# print("Which category does \""+actualword['word']+" \" belong to? 1 positive 2 negative 3 none.")
-							# op=int(input())
-
-							# if op==1 and actualword['word'] not in positive_vocab:
-							# 	positive_vocab.append(actualword['word'])
-							# elif op==2 and actualword['word'] not in negative_vocab:
-							# 	negative_vocab.append(actualword['word'])
-							if tempWord is not '':
-								adjectives_list.append(tempWord)	
-			
+			for x,y in pos_tag(word_tokenize(text)):
+				if y=="JJ" or y=="JJR" or y=="JJS":
+					print("Which category does \""+x+"\" belong to? 1 positive 2 negative 3 none.")
+					op=int(input())
+ 
+					if op==1 and x not in positive_vocab:
+						positive_vocab.append(x)
+					elif op==2 and x not in negative_vocab:
+						negative_vocab.append(x)
+	
 			
 
 					
@@ -217,20 +198,25 @@ def mainAnalysis():
 				if denom is not 0:
 					pmi[t1][t2] = math.log((p_t_com[t1][t2] / denom),2)
 		
-		
+		#print(pmi)
 		for term, n in p_t.items():
 			positive_assoc = sum(pmi[term][tx] for tx in positive_vocab)
 			negative_assoc = sum(pmi[term][tx] for tx in negative_vocab)
 			# if positive_assoc == negative_assoc:
 			# 	print("EQUAL")
 			# 	print(term+" pos"+str(positive_assoc)+" neg "+str(negative_assoc))
-
+			
 			semantic_orientation[term] = positive_assoc - negative_assoc
 
 		semantic_sorted = sorted(semantic_orientation.items(), 
 								key=operator.itemgetter(1), 
 								reverse=True)
-		#print(semantic_orientation)
+		# print("jfj,fgkjgkjbh")
+		# print(semantic_orientation)
+		# print("aaaaaaaaaa")
+		# print(pmi)
+		# print("bbbbbbb")
+		# print(com)
 		if __name__ == "__main__":
 			top_pos = semantic_sorted[:20]
 			top_neg = semantic_sorted[-20:]
@@ -240,8 +226,10 @@ def mainAnalysis():
 			print(top_neg)
 			print("\nTop positive: ")
 			print(top_pos)
+			print("luther:"+str(semantic_orientation["#mlk50"]))
+			print("MARTIN:"+str(semantic_orientation["martin"]))
 			print("HAZARD: "+str(semantic_orientation["hazard"]))
 			print("willian: "+str(semantic_orientation["willian"]))
 			print("conte: "+str(semantic_orientation["conte"]))
 			print("ed: "+str(semantic_orientation["eduardo"]))
-#mainAnalysis()
+# mainAnalysis()
