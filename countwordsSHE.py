@@ -105,7 +105,7 @@ def mainAnalysis():
 			# print("preprocess")
 			# print(preprocess(tweet['text']))
 			terms_stop = [term for term in preprocess(tweet['text']) if term not in stop]
-			count_stop_single.update(terms_stop)
+			
 
 			terms_single = set(terms_all)
 			count_single.update(terms_all)
@@ -116,6 +116,7 @@ def mainAnalysis():
 							# mind the ((double brackets))
 							# startswith() takes a tuple (not a list) if 
 							# we pass a list of inputs
+			count_stop_single.update(terms_only)
 			# print("terms only")
 			# print(terms_only)
 			for i in range(len(terms_only)-1):            
@@ -242,4 +243,4 @@ def mainAnalysis():
 			print("willian: "+str(semantic_orientation["willian"]))
 			print("conte: "+str(semantic_orientation["conte"]))
 			print("ed: "+str(semantic_orientation["eduardo"]))
-#mainAnalysis()
+# mainAnalysis()
