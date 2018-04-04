@@ -73,7 +73,7 @@ def preprocess(s, lowercase=True):
 com = defaultdict(lambda : defaultdict(int))
 
 
-fname = 'NewApp1.json'
+fname = 'bhache.json'
 def mainAnalysis():
 	n_docs=0
 	global semantic_orientation
@@ -135,7 +135,8 @@ def mainAnalysis():
 				ctr+=1
 			if ctr>10:
 				break
-
+		print("--------------------------------------------------------")
+		print(toptweets)
 		for text in toptweets:
 			q = 'https://api.textgain.com/1/tag?' 
 			q += urlencode(dict(q=text, lang='en', key='***'))
@@ -238,4 +239,4 @@ def mainAnalysis():
 			print("willian: "+str(semantic_orientation["willian"]))
 			print("conte: "+str(semantic_orientation["conte"]))
 			print("ed: "+str(semantic_orientation["eduardo"]))
-mainAnalysis()
+#mainAnalysis()

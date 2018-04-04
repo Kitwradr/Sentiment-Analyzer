@@ -11,6 +11,7 @@ LARGE_FONT = ("Verdana" , 25)
 
 #ob = MyListener()
 global hashtagText 
+flag =0
 
 class EmotionApp(tk.Tk):
     def __init__(self):
@@ -114,7 +115,7 @@ class PageTwo(tk.Frame ):
                             command=lambda:controller.show_frame(PageOne))
         button2.pack( pady = 20 , padx = 50 , side=LEFT )
         button4 = tk.Button(self ,text = "Start Sentiment analysis",
-                            command = lambda:controller.show_frame(PageThree))
+                            command = lambda:controller.show_frame(PageFour))
         button4.pack(pady =20)
     def printhashtag(self ,hashtagText):
         print(hashtagText.get())
@@ -199,13 +200,29 @@ class PageFour(tk.Frame):
         tk.Frame.__init__(self, parent)
         label1 = tk.Label(self , text ="Enter the word for which sentiment is to be found" , font = mid_heading)
         label1.pack(pady=20)
-
-        self.wordEntry = tk.Entry(self , font = ("TimesNewRoman" , "16"))
+        self.controller = controller
+        self.wordEntry = tk.Entry(self , font = sub_heading)
         self.wordEntry.pack(pady = 20)
 
         button1 = tk.Button(self , text="Enter" , font = sub_heading,
                                             command = self.semOrientation )
         button1.pack(padx = 20 , side=RIGHT)
+        button2 = tk.Button(self,text ="Increase Accuracy method 1" , font = mid_heading,
+                                            command = self.accuracyoneClick )
+        # button3 = tk.Button(self , text = "Increase accuracy method 2" , font = mid_heading,
+        #                                     command = self.accuracytwoclick)
+        button2.pack()
+        # button3.pack()
+
+    def accuracyoneClick(self):
+        self.controller.show_frame(PageFive)
+
+
+    # def accuracytwoclick(self):
+    #     self.controller.show_frame(PageSix)
+
+
+
 
     def semOrientation(self):
         global semantic_orientation
@@ -215,7 +232,11 @@ class PageFour(tk.Frame):
         label2.pack(pady=30)
 
 
+class PageFive(tk.Frame):
 
+    def __init__(self , parent  , controller):
+        tk.Frame.__init__(self , parent)
+        label1 = tk.Label()
 
 
 if __name__ == "__main__":
