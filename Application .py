@@ -11,7 +11,6 @@ import globals
 
 #ob = MyListener()
 global hashtagText 
-flag =0
 
 class EmotionApp(tk.Tk):
     def __init__(self):
@@ -26,7 +25,7 @@ class EmotionApp(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, PageOne, PageTwo , PageThree , PageFour):
+        for F in (StartPage, PageOne, PageTwo , PageThree , PageFour , PageFive , PageSix):
 
             frame = F(container, self)
 
@@ -86,15 +85,30 @@ class PageOne(tk.Frame , threading.Thread):
                             command=self.printhashtag)
         button2.pack(pady = 20)
         label2 = tk.Label(self , text = "OR" , font = sub_heading )
+        label2.pack(pady =20)
         button3 = tk.Button(self , text = "Upload the JSON file" , font = sub_heading ,bg = "lightblue",
                                         command = self.uploadClick)
-        label2.pack(pady =20)
-
-        button3.pack()
         
-        button1.pack()
+
+        button4 = tk.Button(self , text = "DONE" , font = sub_heading , 
+                                            command = self.doneClick )
+        button4.place(x=700 , y= 400 , width = 120 , height = 25)
+
+        button3.pack(pady = 50)
+        
+        button1.pack(pady = 50)
+
+    def doneClick(self):
+        labelAl = tk.Label(self , text = "Algorithm is running..." , font = sub_heading)
+        labelAl.place(x=400 , y = 450 , width = 300 , height = 50 )
+        mainAnalysis()
+        if globals.filename is not '':
+
+            self.controller.show_frame(PageFour)
+        
 
     def uploadClick(self):
+        globals.uploaded = True
         globals.filename = dialog.askopenfilename()
         print(globals.filename)
 
@@ -115,7 +129,7 @@ class PageTwo(tk.Frame ):
         global hashtagText
         hashtag = hashtagText.get()
 
-        self.contoller = controller
+        self.controller = controller
         tk.Frame.__init__(self, parent)
         label = tk.Label(self, text="Streaming!!!", font=main_heading)
         label.pack(pady=10,padx=10)
@@ -131,14 +145,18 @@ class PageTwo(tk.Frame ):
                             command=lambda:controller.show_frame(PageOne))
         button2.pack( pady = 20 , padx = 50 , side=LEFT )
         button4 = tk.Button(self ,text = "Start Sentiment analysis",
-                            command = lambda:controller.show_frame(PageFour))
+                            command = self.startClick)
         button4.pack(pady =20)
+
+    def startClick(self):
+        self.controller.show_frame(PageFour)
+
+
     def printhashtag(self ,hashtagText):
         print(hashtagText.get())
 
     def stopButtonClick(self):
         stop_stream()
-        mainAnalysis()
 
 class PageThree(tk.Frame):
 
@@ -253,6 +271,11 @@ class PageFive(tk.Frame):
     def __init__(self , parent  , controller):
         tk.Frame.__init__(self , parent)
         label1 = tk.Label()
+
+class PageSix(tk.Frame):
+
+    def __init__(self,parent , controller):
+        tk.Frame.__init__(self , parent)
 
 
 if __name__ == "__main__":

@@ -3,10 +3,10 @@ import operator
 from collections import Counter
 import json
 import math
-import globals
+import globals as g 
 from  globals import *
 from collections import defaultdict
-
+import os
 import re
 
 from nltk.corpus import stopwords
@@ -68,15 +68,21 @@ def preprocess(s, lowercase=True):
 	if lowercase:
 		tokens = [token if emoticon_re.search(token) else token.lower() for token in tokens]
 	return tokens
- 
 
+if (os.path.exists("NewApp.json")):
+	os.remove('NewApp.json')
 
 com = defaultdict(lambda : defaultdict(int))
 
 def mainAnalysis():
-	print("filename = "+filename)
+	
 	n_docs=0
-	with open(globals.filename, 'r') as f:
+	if g.uploaded is True:
+		fname = g.filename
+	else:
+		fname = 'NewApp.json'
+	print("filename = "+fname)
+	with open(fname, 'r') as f:
 		count_all = Counter()
 		tweetList =  []
 		count_single = Counter()

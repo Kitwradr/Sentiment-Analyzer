@@ -6,3 +6,4 @@ negative_vocab = []
 filename = "python.json"
 
 semantic_orientation = {}
+uploaded = False
