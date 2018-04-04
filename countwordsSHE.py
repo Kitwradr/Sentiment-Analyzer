@@ -134,7 +134,8 @@ def mainAnalysis():
 				ctr+=1
 			if ctr>10:
 				break
-
+		print("--------------------------------------------------------")
+		print(toptweets)
 		for text in toptweets:
 			q = 'https://api.textgain.com/1/tag?' 
 			q += urlencode(dict(q=text, lang='en', key='***'))
