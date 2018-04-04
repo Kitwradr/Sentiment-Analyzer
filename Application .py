@@ -1,16 +1,16 @@
 import tkinter as tk
-from tkinter import *
+from tkinter import LEFT , RIGHT
 from constants import *
-from StreamTweets import *
+from StreamTweets import MyListener , fetchtweet , stop_stream
 import threading
 from globals import *
-from countwordsSHE import *
+from countwordsSHE import mainAnalysis 
+import tkinter.filedialog as dialog
+import globals
 
-
-LARGE_FONT = ("Verdana" , 25)
 
 #ob = MyListener()
-global hashtagText 
+global hashtagText , filename
 
 class EmotionApp(tk.Tk):
     def __init__(self):
@@ -46,25 +46,31 @@ class StartPage(tk.Frame):
     def __init__(self , parent , controller):
         tk.Frame.__init__(self,parent,bg="lightblue")
         label = tk.Label(self, text="Sentiment Analyser", font=main_heading)
-        label.pack(pady=100,padx=10)
+        
 
         button = tk.Button(self, text="Start", 
                             command=lambda: controller.show_frame(PageOne))
-        button.pack(pady=20)
+        
 
-        button2 = tk.Button(self, text="Visit Page 2",
-                            command=lambda: controller.show_frame(PageTwo))
-        button2.pack()
+        #button2 = tk.Button(self, text="Visit Page 2",
+        #                    command=lambda: controller.show_frame(PageTwo))
+
+        #label.grid()
+        
+        
+        label.pack(pady=100,padx=10)
+        button.pack(pady=20)  #Using pack manager 
+        #button2.pack()
 
 #hashtagText=None
 class PageOne(tk.Frame , threading.Thread):
-
+    
 
     def __init__(self, parent, controller):
         global hashtagText , hashtag 
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Enter the hashtag", font=LARGE_FONT , bg = "lightblue")
-        label.pack(pady=100,padx=10)
+        label = tk.Label(self, text="Enter the hashtag", font=main_heading , bg = "lightblue")
+        label.pack(pady=50,padx=10)
         self.controller = controller
 
         button1 = tk.Button(self, text="Back to Home",
@@ -78,7 +84,18 @@ class PageOne(tk.Frame , threading.Thread):
         button2 = tk.Button(self, text="Stream Tweets",
                             command=self.printhashtag)
         button2.pack(pady = 20)
+        label2 = tk.Label(self , text = "OR" , font = sub_heading )
+        button3 = tk.Button(self , text = "Upload the JSON file" , font = sub_heading ,bg = "lightblue",
+                                        command = self.uploadClick)
+        label2.pack(pady =20)
+
+        button3.pack()
+        
         button1.pack()
+
+    def uploadClick(self):
+        globals.filename = dialog.askopenfilename()
+        print(globals.filename)
 
     def printhashtag(self ):
         self.controller.show_frame(PageTwo)
@@ -86,8 +103,7 @@ class PageOne(tk.Frame , threading.Thread):
         hashtag = (hashtagText.get())
         self.streamFunc(hashtag)
     
-    def streamFunc(self , hashtag):
-        
+    def streamFunc(self , hashtag):  
         fetchtweet(hashtag)
         
 
@@ -221,4 +237,5 @@ class PageFour(tk.Frame):
 if __name__ == "__main__":
     app = EmotionApp()
     app.geometry(str(WIDTH)+'x'+str(HEIGHT))
+    app.title("Sentiment Analyser")
     app.mainloop()

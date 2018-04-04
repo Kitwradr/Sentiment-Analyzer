@@ -3,6 +3,7 @@ import operator
 from collections import Counter
 import json
 import math
+import globals
 from  globals import *
 from collections import defaultdict
 
@@ -46,7 +47,7 @@ emoticons_str = r"""
 regex_str = [
 	emoticons_str,
 	r'<[^>]+>', # HTML tags
-	r'(?:@[\w_]+)', # @-mentions
+	r'(?:@[\w_]+)', # @mentions
 	r"(?:\#+[\w_]+[\w\'_\-]*[\w_]+)", # hash-tags
 	r'http[s]?://(?:[a-z]|[0-9]|[$-_@.&amp;+]|[!*\(\),]|(?:%[0-9a-f][0-9a-f]))+', # URLs
  
@@ -56,7 +57,7 @@ regex_str = [
 	r'(?:\S)' # anything else
 ]
 	
-tokens_re = re.compile(r'('+'|'.join(regex_str)+')', re.VERBOSE | re.IGNORECASE)
+tokens_re = re.compile(r'('+'|'.join(regex_str)+')', re.VERBOSE | re.IGNORECASE)#verbose helps in writing multiline regular expressions
 emoticon_re = re.compile(r'^'+emoticons_str+'$', re.VERBOSE | re.IGNORECASE)
  
 def tokenize(s):
@@ -72,12 +73,10 @@ def preprocess(s, lowercase=True):
 
 com = defaultdict(lambda : defaultdict(int))
 
-
-fname = 'NewApp1.json'
 def mainAnalysis():
+	print("filename = "+filename)
 	n_docs=0
-	global semantic_orientation
-	with open(fname, 'r') as f:
+	with open(globals.filename, 'r') as f:
 		count_all = Counter()
 		tweetList =  []
 		count_single = Counter()
@@ -93,7 +92,7 @@ def mainAnalysis():
 			n_docs+=1
 			
 			# Create a list with all the terms
-			terms_all = [term for term in preprocess(tweet['text'])]
+			terms_all = [term for term in preprocess(tweet['text']) if 'text' in tweet ]
 			# Update the counter
 			count_all.update(terms_all)
 			
@@ -224,7 +223,7 @@ def mainAnalysis():
 		semantic_sorted = sorted(semantic_orientation.items(), 
 								key=operator.itemgetter(1), 
 								reverse=True)
-
+		#print(semantic_orientation)
 		if __name__ == "__main__":
 			top_pos = semantic_sorted[:20]
 			top_neg = semantic_sorted[-20:]
@@ -238,4 +237,4 @@ def mainAnalysis():
 			print("willian: "+str(semantic_orientation["willian"]))
 			print("conte: "+str(semantic_orientation["conte"]))
 			print("ed: "+str(semantic_orientation["eduardo"]))
-mainAnalysis()
+#mainAnalysis()
