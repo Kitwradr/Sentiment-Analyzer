@@ -31,7 +31,7 @@ positive_vocab = [
 	# 'triumph', 'triumphal', 'triumphant', 'victory', etc.
 ]
 negative_vocab = [
-	'bad', 'terrible', 'crap', 'useless', 'hate', ':(', ':-(','outrageous','unjust','stfu','defeat','🤨','😒','😞','😔','😟','😕','🙁','☹','😣','😫','😩','😤','😠','😡','🤬','😨'
+	'bad', 'terrible', 'crap', 'useless', 'hate', ':(', ':-(','outrageous','unjust','stfu','defeat','tragic','🤨','😒','😞','😔','😟','😕','🙁','☹','😣','😫','😩','😤','😠','😡','🤬','😨'
 	# 'defeat', etc.
 ]
 
@@ -81,7 +81,7 @@ def mainAnalysis():
 		fname = g.filename
 	else:
 		fname = 'NewApp.json'
-	# fname='shobhitgod.json'
+	fname='shobhitgod.json'
 	print("filename = "+fname)
 	with open(fname, 'r') as f:
 		count_all = Counter()
@@ -102,7 +102,8 @@ def mainAnalysis():
 			terms_all = [term for term in preprocess(tweet['text']) if 'text' in tweet ]
 			# Update the counter
 			count_all.update(terms_all)
-			
+			# print("preprocess")
+			# print(preprocess(tweet['text']))
 			terms_stop = [term for term in preprocess(tweet['text']) if term not in stop]
 			count_stop_single.update(terms_stop)
 
@@ -115,13 +116,21 @@ def mainAnalysis():
 							# mind the ((double brackets))
 							# startswith() takes a tuple (not a list) if 
 							# we pass a list of inputs
-
+			print("terms only")
+			print(terms_only)
 			for i in range(len(terms_only)-1):            
 				for j in range(i+1, len(terms_only)):
-					w1, w2 = sorted([terms_only[i], terms_only[j]])                
+					# print("z"+terms_only[i]+" "+terms_only[j])
+					w1, w2 = sorted([terms_only[i], terms_only[j]]) 
+					# print("x"+w1+" "+w2)               
 					if w1 != w2:
+						com[w2][w1] += 1
 						com[w1][w2] += 1
-			
+
+		# print("com")
+		# print(com)
+		# print(count_stop_single.items())	
+		print("most common")
 		print(count_stop_single.most_common(20))
 
 
@@ -226,10 +235,10 @@ def mainAnalysis():
 			print(top_neg)
 			print("\nTop positive: ")
 			print(top_pos)
-			print("luther:"+str(semantic_orientation["#mlk50"]))
+			print("mlk50:"+str(semantic_orientation["#mlk50"]))
 			print("MARTIN:"+str(semantic_orientation["martin"]))
 			print("HAZARD: "+str(semantic_orientation["hazard"]))
 			print("willian: "+str(semantic_orientation["willian"]))
 			print("conte: "+str(semantic_orientation["conte"]))
 			print("ed: "+str(semantic_orientation["eduardo"]))
-# mainAnalysis()
+mainAnalysis()
