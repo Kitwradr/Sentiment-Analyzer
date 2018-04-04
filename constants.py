@@ -7,6 +7,7 @@ WIDTH = 1000
 main_heading = ("Helvetica" , "25")
 sub_heading = ("Helvetica" , "15")
 mid_heading = ("Helvetica" , "18")
+min_heading = ("Helvetics" , "10")
 
 
 hashtag = "" 

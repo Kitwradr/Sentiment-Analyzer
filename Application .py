@@ -233,7 +233,7 @@ class PageFour(tk.Frame):
     def __init__(self,parent , controller):
 
         tk.Frame.__init__(self, parent)
-        print(semantic_orientation)
+        #print(semantic_orientation)
         label1 = tk.Label(self , text ="Enter the word for which sentiment is to be found" , font = mid_heading)
         label1.pack(pady=20)
         self.controller = controller
@@ -242,12 +242,12 @@ class PageFour(tk.Frame):
 
         button1 = tk.Button(self , text="Enter" , font = sub_heading,
                                             command = self.semOrientation )
-        button1.pack(pady = 20 , side=RIGHT)
-        button2 = tk.Button(self,text ="Increase Accuracy method 1" , font = sub_heading,
+        button1.pack(pady = 20 )
+        button2 = tk.Button(self,text ="Increase Accuracy\n Method 1" , font = min_heading,
                                             command = self.accuracyoneClick )
         # button3 = tk.Button(self , text = "Increase accuracy method 2" , font = mid_heading,
         #                                     command = self.accuracytwoclick)
-        button2.place(x=700 , y = 200 , width = 120 , height = 25)
+        button2.place(x=700 , y = 150 , width = 210, height = 45)
         # button3.pack()
 
     def accuracyoneClick(self):
@@ -264,7 +264,7 @@ class PageFour(tk.Frame):
         global semantic_orientation
         word = self.wordEntry.get()
         result = semantic_orientation[word]
-        label2 = tk.Label(self , text="Semantic orientation of "+word+str(result))
+        label2 = tk.Label(self , text="Semantic orientation of "+word+": "+str(result) , font = min_heading)
         label2.pack(pady=30)
 
 

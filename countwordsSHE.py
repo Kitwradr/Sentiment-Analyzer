@@ -81,7 +81,7 @@ def mainAnalysis():
 		fname = g.filename
 	else:
 		fname = 'NewApp.json'
-	fname  = 'bhache.json'
+	#fname  = 'bhache.json'
 	print("filename = "+fname)
 	with open(fname, 'r') as f:
 		count_all = Counter()
