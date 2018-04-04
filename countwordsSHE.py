@@ -81,7 +81,7 @@ def mainAnalysis():
 		fname = g.filename
 	else:
 		fname = 'NewApp.json'
-	fname  = 'bhache.json'
+	# fname  = 'livmci.json'
 	print("filename = "+fname)
 	with open(fname, 'r') as f:
 		count_all = Counter()
@@ -89,6 +89,8 @@ def mainAnalysis():
 		count_single = Counter()
 		count_stop_single = Counter()
 		for line in f:
+			if len(str(line))==1:
+				continue
 			tweet = json.loads(line)
 			if 'retweeted_status' in tweet:
 				str1=tweet['retweeted_status']['retweet_count']
@@ -237,10 +239,10 @@ def mainAnalysis():
 			print(top_neg)
 			print("\nTop positive: ")
 			print(top_pos)
-			print("mlk50:"+str(semantic_orientation["#mlk50"]))
-			print("MARTIN:"+str(semantic_orientation["martin"]))
+			print("mlk50:"+str(semantic_orientation["salah"]))
+			print("MARTIN:"+str(semantic_orientation["anfield"]))
 			print("HAZARD: "+str(semantic_orientation["hazard"]))
 			print("willian: "+str(semantic_orientation["willian"]))
 			print("conte: "+str(semantic_orientation["conte"]))
 			print("ed: "+str(semantic_orientation["eduardo"]))
-# mainAnalysis()
+mainAnalysis()
