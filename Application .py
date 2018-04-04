@@ -45,7 +45,7 @@ class StartPage(tk.Frame):
 
     def __init__(self , parent , controller):
         tk.Frame.__init__(self,parent,bg="lightblue")
-        label = tk.Label(self, text="Sentiment Analyser", font=main_heading)
+        label = tk.Label(self, text="Sentiment Analyser", font=main_heading , bg = "lightblue")
         
 
         button = tk.Button(self, text="Start", font = mid_heading,
@@ -53,7 +53,7 @@ class StartPage(tk.Frame):
         
         
         label.pack(pady=100,padx=10)
-        button.pack(pady=20 , ipady = 10 , ipadx = 60)  #Using pack manager 
+        button.pack(pady=20  , ipadx = 60)  #Using pack manager 
 
 class PageOne(tk.Frame , threading.Thread):
     
@@ -73,7 +73,7 @@ class PageOne(tk.Frame , threading.Thread):
         
         hashtagText.pack(pady = 20 , ipady = 10 )
 
-        button2 = tk.Button(self, text="Stream Tweets",
+        button2 = tk.Button(self, text="Stream Tweets",font = sub_heading , 
                             command=self.printhashtag)
             
         button2.pack(pady = 20)
@@ -85,25 +85,26 @@ class PageOne(tk.Frame , threading.Thread):
 
         button4 = tk.Button(self , text = "DONE" , font = sub_heading , 
                                             command = self.doneClick )
-        button4.place(x=700 , y= 400 , width = 120 , height = 25)
+        button4.place(x=700 , y= 410 , width = 120 , height = 25)
 
         button3.pack(pady = 50)
         
-        button1.pack(pady = 50)
+        button1.pack(pady = 40)
 
     def doneClick(self):
-        labelAl = tk.Label(self , text = "Algorithm is running..." , font = sub_heading)
-        labelAl.place(x=400 , y = 450 , width = 300 , height = 50 )
+        labelAl = tk.Label(self , text = "Algorithm is running..." , font = mid_heading,
+                                                        bg = "LightSteelBlue2" )
+        labelAl.place(x=375 , y = 450 , width = 300 , height = 50 )
         mainAnalysis()
-        if globals.filename is not '':
+        if g.filename is not '':
 
             self.controller.show_frame(PageFour)
         
 
     def uploadClick(self):
-        globals.uploaded = True
-        globals.filename = dialog.askopenfilename()
-        print(globals.filename)
+        g.uploaded = True
+        g.filename = dialog.askopenfilename()
+        print(g.filename)
 
     def printhashtag(self ):
         self.controller.show_frame(PageTwo)
@@ -121,9 +122,9 @@ class PageTwo(tk.Frame ):
     def __init__(self, parent, controller):
         global hashtagText
         hashtag = hashtagText.get()
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent , bg = "papaya whip")
         self.controller = controller
-        label = tk.Label(self, text="Streaming!!!", font=main_heading)
+        label = tk.Label(self, text="Streaming!!!", font=main_heading , bg = "papaya whip")
         label.pack(pady=10,padx=10)
 
         button3 = tk.Button(self , text ="Stop streaming" , font = sub_heading,
@@ -142,8 +143,8 @@ class PageTwo(tk.Frame ):
         button4.place(x = 350 , y = 200 , height=25 , width = 300)
 
     def startClick(self):
-        labelAl = tk.Label(self , text = "Algorithm is running..." , font = sub_heading)
-        labelAl.place(x=400 , y = 450 , width = 300 , height = 50 )
+        labelAl = tk.Label(self , text = "Algorithm is running..." , font = sub_heading , bg = "papaya whip")
+        labelAl.place(x=370 , y = 230 , width = 300 , height = 50 )
         mainAnalysis()
         self.controller.show_frame(PageFour)
 
@@ -232,6 +233,7 @@ class PageFour(tk.Frame):
     def __init__(self,parent , controller):
 
         tk.Frame.__init__(self, parent)
+        print(semantic_orientation)
         label1 = tk.Label(self , text ="Enter the word for which sentiment is to be found" , font = mid_heading)
         label1.pack(pady=20)
         self.controller = controller
@@ -240,12 +242,12 @@ class PageFour(tk.Frame):
 
         button1 = tk.Button(self , text="Enter" , font = sub_heading,
                                             command = self.semOrientation )
-        button1.pack(padx = 20 , side=RIGHT)
-        button2 = tk.Button(self,text ="Increase Accuracy method 1" , font = mid_heading,
+        button1.pack(pady = 20 , side=RIGHT)
+        button2 = tk.Button(self,text ="Increase Accuracy method 1" , font = sub_heading,
                                             command = self.accuracyoneClick )
         # button3 = tk.Button(self , text = "Increase accuracy method 2" , font = mid_heading,
         #                                     command = self.accuracytwoclick)
-        button2.pack()
+        button2.place(x=700 , y = 200 , width = 120 , height = 25)
         # button3.pack()
 
     def accuracyoneClick(self):

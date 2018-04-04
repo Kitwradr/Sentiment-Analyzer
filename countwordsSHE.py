@@ -81,7 +81,7 @@ def mainAnalysis():
 		fname = g.filename
 	else:
 		fname = 'NewApp.json'
-	fname='shobhitgod.json'
+	fname  = 'bhache.json'
 	print("filename = "+fname)
 	with open(fname, 'r') as f:
 		count_all = Counter()
@@ -116,8 +116,8 @@ def mainAnalysis():
 							# mind the ((double brackets))
 							# startswith() takes a tuple (not a list) if 
 							# we pass a list of inputs
-			print("terms only")
-			print(terms_only)
+			# print("terms only")
+			# print(terms_only)
 			for i in range(len(terms_only)-1):            
 				for j in range(i+1, len(terms_only)):
 					# print("z"+terms_only[i]+" "+terms_only[j])
@@ -155,13 +155,14 @@ def mainAnalysis():
 		for text in toptweets:
 			for x,y in pos_tag(word_tokenize(text)):
 				if y=="JJ" or y=="JJR" or y=="JJS":
-					print("Which category does \""+x+"\" belong to? 1 positive 2 negative 3 none.")
-					op=int(input())
+					# print("Which category does \""+x+"\" belong to? 1 positive 2 negative 3 none.")
+					# op=int(input())
  
-					if op==1 and x not in positive_vocab:
-						positive_vocab.append(x)
-					elif op==2 and x not in negative_vocab:
-						negative_vocab.append(x)
+					# if op==1 and x not in positive_vocab:
+					# 	positive_vocab.append(x)
+					# elif op==2 and x not in negative_vocab:
+					# 	negative_vocab.append(x)
+					adjectives_list.append(x)
 	
 			
 
@@ -241,4 +242,4 @@ def mainAnalysis():
 			print("willian: "+str(semantic_orientation["willian"]))
 			print("conte: "+str(semantic_orientation["conte"]))
 			print("ed: "+str(semantic_orientation["eduardo"]))
-mainAnalysis()
+#mainAnalysis()
