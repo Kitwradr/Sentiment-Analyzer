@@ -6,7 +6,7 @@ import threading
 from globals import *
 from countwordsSHE import mainAnalysis 
 import tkinter.filedialog as dialog
-import globals
+import globals as g
 
 
 #ob = MyListener()
@@ -48,27 +48,19 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Sentiment Analyser", font=main_heading)
         
 
-        button = tk.Button(self, text="Start", 
-                            command=lambda: controller.show_frame(PageOne))
-        
-
-        #button2 = tk.Button(self, text="Visit Page 2",
-        #                    command=lambda: controller.show_frame(PageTwo))
-
-        #label.grid()
+        button = tk.Button(self, text="Start", font = mid_heading,
+                            command=lambda: controller.show_frame(PageOne) )
         
         
         label.pack(pady=100,padx=10)
-        button.pack(pady=20)  #Using pack manager 
-        #button2.pack()
+        button.pack(pady=20 , ipady = 10 , ipadx = 60)  #Using pack manager 
 
-#hashtagText=None
 class PageOne(tk.Frame , threading.Thread):
     
 
     def __init__(self, parent, controller):
         global hashtagText , hashtag 
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent , bg = "LightSteelBlue2")
         label = tk.Label(self, text="Enter the hashtag", font=main_heading , bg = "lightblue")
         label.pack(pady=50,padx=10)
         self.controller = controller
@@ -83,10 +75,11 @@ class PageOne(tk.Frame , threading.Thread):
 
         button2 = tk.Button(self, text="Stream Tweets",
                             command=self.printhashtag)
+            
         button2.pack(pady = 20)
         label2 = tk.Label(self , text = "OR" , font = sub_heading )
         label2.pack(pady =20)
-        button3 = tk.Button(self , text = "Upload the JSON file" , font = sub_heading ,bg = "lightblue",
+        button3 = tk.Button(self , text = "Upload the JSON file" , font = sub_heading ,bg = "aquamarine2",
                                         command = self.uploadClick)
         
 
@@ -128,34 +121,41 @@ class PageTwo(tk.Frame ):
     def __init__(self, parent, controller):
         global hashtagText
         hashtag = hashtagText.get()
-
-        self.controller = controller
         tk.Frame.__init__(self, parent)
+        self.controller = controller
         label = tk.Label(self, text="Streaming!!!", font=main_heading)
         label.pack(pady=10,padx=10)
+
         button3 = tk.Button(self , text ="Stop streaming" , font = sub_heading,
                             command = self.stopButtonClick)
         button3.pack(pady=20)
 
         button1 = tk.Button(self, text="Back to Home", font = sub_heading,
                             command=lambda: controller.show_frame(StartPage))
-        button1.pack( pady = 20 , padx = 50,side = LEFT)
+        button1.pack( pady = 20 , padx = 200,side = LEFT)
 
         button2 = tk.Button(self, text="Page One",font = sub_heading,
                             command=lambda:controller.show_frame(PageOne))
-        button2.pack( pady = 20 , padx = 50 , side=LEFT )
-        button4 = tk.Button(self ,text = "Start Sentiment analysis",
+        button2.pack( pady = 20 , padx = 100 , side=LEFT )
+        button4 = tk.Button(self ,text = "Start Sentiment analysis", font = sub_heading,
                             command = self.startClick)
-        button4.pack(pady =20)
+        button4.place(x = 350 , y = 200 , height=25 , width = 300)
 
     def startClick(self):
+        labelAl = tk.Label(self , text = "Algorithm is running..." , font = sub_heading)
+        labelAl.place(x=400 , y = 450 , width = 300 , height = 50 )
+        mainAnalysis()
         self.controller.show_frame(PageFour)
+
 
 
     def printhashtag(self ,hashtagText):
         print(hashtagText.get())
 
     def stopButtonClick(self):
+        numTweet = tk.Label(self , text = "Number of tweets streamed:"+str(g.tweetnum) , font = mid_heading , 
+                                                                    bg = "bisque")
+        numTweet.place(x = 250 , y = 150 , width = 500 , height = 25)
         stop_stream()
 
 class PageThree(tk.Frame):

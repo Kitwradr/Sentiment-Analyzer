@@ -2,6 +2,7 @@ from tweepy import Stream
 from tweepy.streaming import StreamListener
 import tweepy
 from tweepy import OAuthHandler
+import globals as g
  
 consumer_key = 'vdLIrbn0VxPvb5lE5y8Ptk5zW'
 consumer_secret = 'r9ygKXOf4GcmWJaPH0jQFESBezOGnkIRSa29BweIatuaKruLdp'
@@ -13,12 +14,13 @@ auth.set_access_token(access_token, access_secret)
  
 api = tweepy.API(auth)
 
-
 class MyListener(StreamListener):
 
     def on_data(self,data):
         try:
             with open('NewApp.json','a') as f:
+                g.tweetnum+=1
+                print(g.tweetnum)
                 f.write(data)
                 return True
         except BaseException as e:
