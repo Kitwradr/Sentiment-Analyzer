@@ -247,4 +247,4 @@ def mainAnalysis():
 			print("willian: "+str(semantic_orientation["willian"]))
 			print("conte: "+str(semantic_orientation["conte"]))
 			print("ed: "+str(semantic_orientation["eduardo"]))
-mainAnalysis()
+#mainAnalysis()

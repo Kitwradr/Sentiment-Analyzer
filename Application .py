@@ -288,19 +288,19 @@ class PageFive(tk.Frame):
 
         self.tLabel = tk.Label(self , text = g.toptweets[self.i] , font = sub_heading)
         self.i+=1
-        self.tLabel.pack(pady  = 20 , ipday = 10)
+        self.tLabel.pack(pady  = 20 , ipady = 15)
         self.word = tk.Entry(self , font = min_heading)
-        self.word.pack(pady = 20)
+        self.word.pack(pady = 20 , ipady = 15)
         self.controller = controller
-        button1 = tk.Button(self , text = "Positive" , font = min_heading , 
+        button1 = tk.Button(self , text = "Positive" , font = min_heading_bold , 
                             command = self.posButtonClick )
-        button1.pack(pady  = 20 ,padx = 200 , side = LEFT )
-        button2 = tk.Button(self , text = "Negative" , font = min_heading , 
+        button1.place(x = 350 , y = 250 , width = 120 , height = 25)
+        button2 = tk.Button(self , text = "Negative" , font = min_heading_bold , 
                             command = self.negButtonClick )
-        button2.pack(padx = 50 , side = LEFT )
+        button2.place(x = 550 , y = 250 , width = 120 , height = 25)
         button3 = tk.Button(self , text = "NEXT" , font = sub_heading,
                         command = self.nextClick)
-        button3.pack()
+        button3.place(x = 425 , y = 300 , width = 150 , height = 30)
 
     def nextClick(self):
         if(self.i <=5):
