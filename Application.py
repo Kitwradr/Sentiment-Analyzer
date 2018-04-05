@@ -7,6 +7,7 @@ from globals import *
 from countwordsSHE import *
 import tkinter.filedialog as dialog
 import globals as g
+from PIL import ImageTk as itk
 
 
 #ob = MyListener()
@@ -44,7 +45,10 @@ class EmotionApp(tk.Tk):
 class StartPage(tk.Frame):
 
     def __init__(self , parent , controller):
+        background = "back.jpg"
+        #background_image = itk.PhotoImage(file = background)
         tk.Frame.__init__(self,parent,bg="lightblue")
+        #tk.Frame.__init__(self , parent , image = background_image)
         label = tk.Label(self, text="Sentiment Analyser", font=main_heading , bg = "lightblue")
         
 
