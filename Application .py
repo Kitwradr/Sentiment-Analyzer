@@ -1,10 +1,10 @@
 import tkinter as tk
-from tkinter import LEFT , RIGHT
+from tkinter import LEFT , RIGHT , END
 from constants import *
 from StreamTweets import MyListener , fetchtweet , stop_stream
 import threading
 from globals import *
-from countwordsSHE import mainAnalysis 
+from countwordsSHE import *
 import tkinter.filedialog as dialog
 import globals as g
 
@@ -232,8 +232,15 @@ class PageFour(tk.Frame):
 
     def __init__(self,parent , controller):
 
-        tk.Frame.__init__(self, parent)
+        tk.Frame.__init__(self, parent , bg = "LightGoldenrod1")
         #print(semantic_orientation)
+        button3 = tk.Button(self,text = "View top Tweets" , font = sub_heading)
+        button3.place(x = 100 , y = 500)
+        button3 = tk.Button(self,text = "View top positive words" , font = sub_heading)
+        button3.place( x = 350 , y = 500)
+        button3 = tk.Button(self,text = "View top negative words" , font = sub_heading)
+        button3.place( x = 700 , y =500)
+
         label1 = tk.Label(self , text ="Enter the word for which sentiment is to be found" , font = mid_heading)
         label1.pack(pady=20)
         self.controller = controller
@@ -257,22 +264,82 @@ class PageFour(tk.Frame):
     # def accuracytwoclick(self):
     #     self.controller.show_frame(PageSix)
 
-
-
-
     def semOrientation(self):
         global semantic_orientation
         word = self.wordEntry.get()
         result = semantic_orientation[word]
-        label2 = tk.Label(self , text="Semantic orientation of "+word+": "+str(result) , font = min_heading)
+        label2 = tk.Label(self , text="Semantic orientation of "+word+": "+str(result) , font = min_heading,
+                                                                        bg = "goldenrod1")
         label2.pack(pady=30)
 
 
 class PageFive(tk.Frame):
+    i=0
 
     def __init__(self , parent  , controller):
-        tk.Frame.__init__(self , parent)
-        label1 = tk.Label()
+       
+        tk.Frame.__init__(self , parent , bg ="SeaGreen2")
+        print(g.toptweets)
+        topList = g.toptweets[:6]
+        print(topList)
+        qlabel = tk.Label(self , text = "Enter the positive or negative words in these tweets" , 
+                                                            font = sub_heading)
+        qlabel.pack(pady = 20)
+
+        self.tLabel = tk.Label(self , text = g.toptweets[self.i] , font = sub_heading)
+        self.i+=1
+        self.tLabel.pack(pady  = 20 , ipday = 10)
+        self.word = tk.Entry(self , font = min_heading)
+        self.word.pack(pady = 20)
+        self.controller = controller
+        button1 = tk.Button(self , text = "Positive" , font = min_heading , 
+                            command = self.posButtonClick )
+        button1.pack(pady  = 20 ,padx = 200 , side = LEFT )
+        button2 = tk.Button(self , text = "Negative" , font = min_heading , 
+                            command = self.negButtonClick )
+        button2.pack(padx = 50 , side = LEFT )
+        button3 = tk.Button(self , text = "NEXT" , font = sub_heading,
+                        command = self.nextClick)
+        button3.pack()
+
+    def nextClick(self):
+        if(self.i <=5):
+            tempstr =  g.toptweets[self.i]
+            char_list = [tempstr[j] for j in range(len(tempstr)) if ord(tempstr[j]) in range(65536)]
+            tempstr = ''
+            for  j in char_list:
+                tempstr+=j
+            
+            self.tLabel['text'] = tempstr
+            self.i+=1
+        if(self.i == 6 ):
+            dLabel = tk.Label(self , text = "Running modified algorithm..." , font = sub_heading,)
+            dLabel.pack(pady = 20)
+            mainAnalysis()
+            self.controller.show_frame(PageFour)
+
+    
+    def posButtonClick(self):
+        global positive_vocab
+        
+        positive_vocab.append(self.word.get())
+        print(positive_vocab)
+        self.word.delete(0,END)
+        
+
+
+
+    def negButtonClick(self):
+        global negative_vocab
+        
+        print(self.word.get())
+        negative_vocab.append(self.word.get())
+        print(negative_vocab)
+        self.word.delete(0,END)
+        
+
+
+
 
 class PageSix(tk.Frame):
 

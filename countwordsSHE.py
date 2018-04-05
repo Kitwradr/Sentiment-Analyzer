@@ -75,13 +75,12 @@ if (os.path.exists("NewApp.json")):
 com = defaultdict(lambda : defaultdict(int))
 
 def mainAnalysis():
-	
 	n_docs=0
 	if g.uploaded is True:
 		fname = g.filename
 	else:
 		fname = 'NewApp.json'
-	#fname  = 'bhache.json'
+	#fname  = 'Liverpool.json'
 	print("filename = "+fname)
 	with open(fname, 'r') as f:
 		count_all = Counter()
@@ -140,19 +139,18 @@ def mainAnalysis():
 
 		newlist = tweetList[::-1]
 		idlist= list()
-		toptweets=list()
 		ctr=0
 		for i in newlist:
 			if i[1] not in idlist:
 				idlist.append(i[1])
 
-				toptweets.append(i[2])
+				g.toptweets.append(i[2])
 				ctr+=1
 			if ctr>10:
 				break
 		print("--------------------------------------------------------")
 		print(toptweets)
-		for text in toptweets:
+		for text in g.toptweets:
 			for x,y in pos_tag(word_tokenize(text)):
 				if y=="JJ" or y=="JJR" or y=="JJS":
 					# print("Which category does \""+x+"\" belong to? 1 positive 2 negative 3 none.")
@@ -191,6 +189,7 @@ def mainAnalysis():
 				com_max.append(((t1, t2), t2_count))
 		# Get the most frequent co-occurrences
 		terms_max = sorted(com_max, key=operator.itemgetter(1), reverse=True)
+		print("most concurrent")
 		print(terms_max[:5])
 
 
@@ -212,6 +211,9 @@ def mainAnalysis():
 		for term, n in p_t.items():
 			positive_assoc = sum(pmi[term][tx] for tx in positive_vocab)
 			negative_assoc = sum(pmi[term][tx] for tx in negative_vocab)
+			if term=='insane':
+				print(pmi[term])
+				print("------------------")
 			# if positive_assoc == negative_assoc:
 			# 	print("EQUAL")
 			# 	print(term+" pos"+str(positive_assoc)+" neg "+str(negative_assoc))

@@ -1,7 +1,5 @@
 adjectives_list = ["SampleWord"]
 
-positive_vocab = []
-negative_vocab = []
 
 filename = "python.json"
 
@@ -10,3 +8,4 @@ uploaded = False
 
 tweetnum = 0
 streaming = True
+toptweets = ['sampleTweet']
