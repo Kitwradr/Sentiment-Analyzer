@@ -132,8 +132,8 @@ def mainAnalysis():
 		# print("com")
 		# print(com)
 		# print(count_stop_single.items())	
-		print("most common")
-		print(count_stop_single.most_common(20))
+		#print("most common")
+		#print(count_stop_single.most_common(20))
 
 
 		tweetList.sort()
@@ -151,8 +151,8 @@ def mainAnalysis():
 				ctr+=1
 			if ctr>10:
 				break
-		print("--------------------------------------------------------")
-		print(toptweets)
+		#print("--------------------------------------------------------")
+		#print(toptweets)
 		for text in g.toptweets:
 			for x,y in pos_tag(word_tokenize(text)):
 				if y=="JJ" or y=="JJR" or y=="JJS":

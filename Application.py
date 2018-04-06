@@ -238,7 +238,8 @@ class PageFour(tk.Frame):
 
         tk.Frame.__init__(self, parent , bg = "LightGoldenrod1")
         #print(semantic_orientation)
-        button3 = tk.Button(self,text = "View top Tweets" , font = sub_heading)
+        button3 = tk.Button(self,text = "View top Tweets" , font = sub_heading,
+                                            command = self.topClick)
         button3.place(x = 100 , y = 500)
         button3 = tk.Button(self,text = "View top positive words" , font = sub_heading)
         button3.place( x = 350 , y = 500)
@@ -260,6 +261,9 @@ class PageFour(tk.Frame):
         #                                     command = self.accuracytwoclick)
         button2.place(x=700 , y = 150 , width = 210, height = 45)
         # button3.pack()
+
+    def topClick(self):
+        self.controller.show_frame(PageSix)
 
     def accuracyoneClick(self):
         self.controller.show_frame(PageFive)
@@ -346,9 +350,32 @@ class PageFive(tk.Frame):
 
 
 class PageSix(tk.Frame):
+    i=0
 
     def __init__(self,parent , controller):
-        tk.Frame.__init__(self , parent)
+        tk.Frame.__init__(self , parent , bg = 'thistle2')
+        self.controller = controller
+        self.tLabel = tk.Label(self , text = g.toptweets[self.i] , font = sub_heading , bg = 'thistle2')
+        self.i+=1
+        self.tLabel.pack(pady = 20)
+        button3 = tk.Button(self , text = "NEXT" , font = sub_heading,
+                        command = self.nextClick)
+        button3.pack(pady = 30)
+
+    def nextClick(self):
+        if(self.i <=10):
+            tempstr =  g.toptweets[self.i]
+            char_list = [tempstr[j] for j in range(len(tempstr)) if ord(tempstr[j]) in range(65536)]
+            tempstr = ''
+            for  j in char_list:
+                tempstr+=j
+            
+            self.tLabel['text'] = tempstr
+            self.i+=1
+        if(self.i == 11 ):
+            self.controller.show_frame(PageFour)
+
+
 
 
 if __name__ == "__main__":
