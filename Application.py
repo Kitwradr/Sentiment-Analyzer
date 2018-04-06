@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import LEFT , RIGHT , END
+from tkinter import *
 from constants import *
 from StreamTweets import MyListener , fetchtweet , stop_stream
 import threading
@@ -8,6 +8,7 @@ from countwordsSHE import *
 import tkinter.filedialog as dialog
 import globals as g
 from PIL import ImageTk as itk
+from PIL import Image
 
 
 #ob = MyListener()
@@ -45,19 +46,27 @@ class EmotionApp(tk.Tk):
 class StartPage(tk.Frame):
 
     def __init__(self , parent , controller):
-        background = "back.jpg"
-        #background_image = itk.PhotoImage(file = background)
+
         tk.Frame.__init__(self,parent,bg="lightblue")
-        #tk.Frame.__init__(self , parent , image = background_image)
+    
         label = tk.Label(self, text="Sentiment Analyser", font=main_heading , bg = "lightblue")
         
 
         button = tk.Button(self, text="Start", font = mid_heading,
                             command=lambda: controller.show_frame(PageOne) )
+
+        img = Image.open('senti.png')
+        
+        #resized = img.resize((600 , 300))
+        pimg = itk.PhotoImage(img)
+        imgLabel = tk.Label(self , image = pimg)
+        imgLabel.image = pimg
         
         
-        label.pack(pady=100,padx=10)
+        label.pack(pady=75,padx=10)
         button.pack(pady=20  , ipadx = 60)  #Using pack manager 
+        imgLabel.pack(pady = 50)
+        
 
 class PageOne(tk.Frame , threading.Thread):
     
@@ -65,6 +74,14 @@ class PageOne(tk.Frame , threading.Thread):
     def __init__(self, parent, controller):
         global hashtagText , hashtag 
         tk.Frame.__init__(self, parent , bg = "LightSteelBlue2")
+        img1 = Image.open('bird.jpg')
+        
+        resized = img1.resize((900 , 280))
+        img = itk.PhotoImage(resized)
+        panel = tk.Label(self, image = img)
+        panel.image = img
+        panel.place(x=20 , y = 25)
+
         label = tk.Label(self, text="Enter the hashtag", font=main_heading , bg = "lightblue")
         label.pack(pady=50,padx=10)
         self.controller = controller
