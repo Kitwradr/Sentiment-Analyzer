@@ -106,7 +106,7 @@ class PageOne(tk.Frame , threading.Thread):
 
         button4 = tk.Button(self , text = "DONE" , font = sub_heading , 
                                             command = self.doneClick )
-        button4.place(x=700 , y= 410 , width = 120 , height = 25)
+        button4.place(x=700 , y= 440 , width = 120 , height = 25)
 
         button3.pack(pady = 50)
         
@@ -293,8 +293,13 @@ class PageFour(tk.Frame):
         global semantic_orientation
         word = self.wordEntry.get()
         result = semantic_orientation[word]
-        label2 = tk.Label(self , text="Semantic orientation of "+word+": "+str(result) , font = min_heading,
+        label2 = tk.Label(self , text="Semantic orientation of "+word+": "+str(result) , font = min_heading_bold,
                                                                         bg = "goldenrod1")
+        # if(result>0):
+        #     label2['text'] = "Semantic orientation of "+word+": "+str(result) + '😃'
+        # else:
+        #     label2['text'] = "Semantic orientation of "+word+": "+str(result) + '🙁'
+
         label2.pack(pady=30)
 
 
@@ -315,17 +320,17 @@ class PageFive(tk.Frame):
         self.i+=1
         self.tLabel.pack(pady  = 20 , ipady = 15)
         self.word = tk.Entry(self , font = min_heading)
-        self.word.pack(pady = 20 , ipady = 15)
+        self.word.pack(pady = 50 , ipady = 15)
         self.controller = controller
         button1 = tk.Button(self , text = "Positive" , font = min_heading_bold , 
                             command = self.posButtonClick )
-        button1.place(x = 350 , y = 250 , width = 120 , height = 25)
+        button1.place(x = 350 , y = 350 , width = 120 , height = 25)
         button2 = tk.Button(self , text = "Negative" , font = min_heading_bold , 
                             command = self.negButtonClick )
-        button2.place(x = 550 , y = 250 , width = 120 , height = 25)
+        button2.place(x = 550 , y = 350 , width = 120 , height = 25)
         button3 = tk.Button(self , text = "NEXT" , font = sub_heading,
                         command = self.nextClick)
-        button3.place(x = 425 , y = 300 , width = 150 , height = 30)
+        button3.place(x = 425 , y = 400 , width = 150 , height = 30)
 
     def nextClick(self):
         if(self.i <=5):
@@ -338,10 +343,11 @@ class PageFive(tk.Frame):
             self.tLabel['text'] = tempstr
             self.i+=1
         if(self.i == 6 ):
-            dLabel = tk.Label(self , text = "Running modified algorithm..." , font = sub_heading,)
+            dLabel = tk.Label(self , text = "Running modified algorithm..." , font = sub_heading)
             dLabel.pack(pady = 20)
             mainAnalysis()
             self.controller.show_frame(PageFour)
+            dLabel.destroy()
 
     
     def posButtonClick(self):
@@ -398,5 +404,5 @@ class PageSix(tk.Frame):
 if __name__ == "__main__":
     app = EmotionApp()
     app.geometry(str(WIDTH)+'x'+str(HEIGHT))
-    app.title("Sentiment Analyser")
+    app.title("Sentiment Analyzer")
     app.mainloop()
